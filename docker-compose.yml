@@ -1,0 +1,64 @@
+version: "3.7"
+services:
+  a2a:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: base
+    restart: always
+    volumes:
+      - ./:/var/www/html/
+      - ./logs/php-error.log:/var/log/error.log
+    ports:
+      - 8000:80
+    environment:
+      - APP_ENV=development
+
+        #PHP Settings
+      - PHP_OPCACHE_VALIDATE_TIMESTAMPS=Off
+      - PHP_OPCACHE_ENABLE=Off
+      - PHP_DISPLAY_ERRORS=On
+      - PHP_DISPLAY_STARTUP_ERRORS=Off
+      # 22517 = E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED & ~E_WARNING;
+      - PHP_ERROR_REPORTING=22517
+      - PHP_UPLOAD_MAX_FILESIZE=50M
+      - PHP_MAX_EXECUTION_TIME=90
+      - PHP_MEMORY_LIMIT=512M
+      - PHP_POST_MAX_SIZE=50M
+
+        # PHP FPM Settings
+      - PHP_FPM_PM=dynamic
+      - PHP_FPM_MAX_CHILDREN=20
+      - PHP_FPM_START_SERVERS=5
+      - PHP_FPM_MIN_SPARE_SERVERS=5
+      - PHP_FPM_MAX_SPARE_SERVERS=15
+      - PHP_FPM_MAX_REQUESTS=200
+
+        #Apache MPM Settings
+      - APACHE_MPM_SERVER_LIMIT=25
+      - APACHE_MPM_START_SERVERS=2
+      - APACHE_MPM_MIN_SPARE_THREADS=25
+      - APACHE_MPM_MAX_SPARE_THREADS=75
+      - APACHE_MPM_THREAD_LIMIT=50
+      - APACHE_MPM_THREADS_PER_CHILD=25
+      - APACHE_MPM_MAX_REQUEST_WORKERS=25
+      - APACHE_MPM_MAX_CONNECTIONS_PER_CHILD=10000
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'a2a_kg'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - 3306:3306
+    volumes:
+      - my-db:/var/lib/mysql
+
+volumes:
+  http:
+    driver: local
+  my-db:
+    driver: local
