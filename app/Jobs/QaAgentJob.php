@@ -18,7 +18,7 @@ class QaAgentJob implements ShouldQueue
     public function handle(): void
     {
         $q = $this->question->question;
-        $ans = ['text' => "I can answer 'why X related to Y' and 'how process Z works'.", 'support' => []];
+        $ans = ['text' => "Something went wrong.", 'support' => []];
         // Improved regex for 'why is X related to Y' questions
         if (preg_match('/why\\s+is\\s+(.+?)\\s+related\\s+to\\s+(.+?)\\??$/i', $q, $m)) {
             $ans = $this->why(trim($m[1]), trim($m[2]));

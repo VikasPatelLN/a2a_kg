@@ -10,5 +10,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(KgSampleSeeder::class);
         $this->call(QaSampleSeeder::class);
+        $this->call(WebScrapingSeeder::class);
+        $this->call(GraphEntitySeeder::class);
+        $this->call(OrderProcessingSeeder::class);
     }
 }

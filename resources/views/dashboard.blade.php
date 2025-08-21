@@ -33,7 +33,7 @@
       <h3>Q&A</h3>
       <form method="POST" action="{{ route('qa.ask') }}">
         @csrf
-        <input name="q" placeholder='e.g., Why is "Order Service" related to "Payment Gateway"?' required>
+        <input name="q" placeholder='e.g., How is "Order Service" related to "Payment Gateway"?' required>
         <button type="submit">Ask</button>
       </form>
       <details open>
